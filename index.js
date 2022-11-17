@@ -8,15 +8,15 @@ const PORT =  process.env.PORT || 4000 ;
 
 //home route
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Hello from LCO</h1>");
+  res.status(200).send("<h1>WELCOME TO HOME</h1>");
 });
 
 // instagram route
 app.get("/api/v1/instagram", (req, res) => {
   const instaSocial = {
-    username: "hiteshchoudharyOfficial",
-    folowers: 66,
-    follows: 70,
+    username: "Nidhin",
+    folowers: 1,
+    follows: 7,
     date: format.asString("dd[MM] - hh:mm:ss", new Date()),
   };
 
@@ -27,7 +27,7 @@ app.get("/api/v1/instagram", (req, res) => {
 // facebook route
 app.get("/api/v1/facebook", (req, res) => {
   const instaSocial = {
-    username: "hiteshchoudharyPage",
+    username: "Nidhn",
     folowers: 88,
     follows: 10,
     date: format.asString("dd[MM] - hh:mm:ss", new Date()),
@@ -40,8 +40,8 @@ app.get("/api/v1/facebook", (req, res) => {
 // linkdin route
 app.get("/api/v1/linkedin", (req, res) => {
   const instaSocial = {
-    username: "hiteshchoudhary",
-    folowers: 800,
+    username: "Nidhin",
+    folowers: 100,
     follows: 80,
     date: format("hh:mm:ss.SSS", new Date()),
   };
