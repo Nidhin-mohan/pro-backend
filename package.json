@@ -4,7 +4,7 @@
   "description": "just an app",
   "start": "nodemon index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "Nidhin  M",
   "license": "ISC",
