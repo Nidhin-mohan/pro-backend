@@ -47,6 +47,12 @@ app.get('/api/v1/mycourse/:courseId', (req,res) => {
    res.send(mycourse)
 })
 
+app.post("/api/v1/addCourse", (req, res) => {
+    console.log(req.body);
+    courses.push(req.body);
+    res.send(true)
+})
+
 
 app.listen(4000, () => {
     console.log('server is runnig at port 4000')
