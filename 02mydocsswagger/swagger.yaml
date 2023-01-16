@@ -115,6 +115,41 @@ paths:
         
       500:
         description: internal error
+
+ /mycourse/{courseId}:
+  get: 
+    tags:
+       - String
+    summary: returns course based on requist id
+    parameters: 
+     - name: courseId
+       in: path
+       required: true
+       default: 22
+       schema: 
+         type: string                 
+    responses: 
+      200:
+        description: All good succes
+        content:
+          application /json:
+            schema:
+              type: array
+              items:
+                types: object                 
+                properties:
+                  id:
+                     type: string
+                  name:
+                     type: string
+                  price:
+                      type: number
+
+      400:
+        description: Bad request
+        
+      500:
+        description: internal error
        
     
 

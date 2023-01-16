@@ -42,6 +42,11 @@ app.get('/api/v1/courses', (req,res) => {
     res.send(courses)
 })
 
+app.get('/api/v1/mycourse/:courseId', (req,res) => {
+   const mycourse =courses.find(course => course.id === req.params.courseId)
+   res.send(mycourse)
+})
+
 
 app.listen(4000, () => {
     console.log('server is runnig at port 4000')
