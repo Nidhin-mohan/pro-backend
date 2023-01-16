@@ -38,6 +38,10 @@ app.get('/api/v1/lcoobject', (req,res) => {
     res.send({id: "55", name: "Learn Backend", price: 999})
 })
 
+app.get('/api/v1/courses', (req,res) => {
+    res.send(courses)
+})
+
 
 app.listen(4000, () => {
     console.log('server is runnig at port 4000')

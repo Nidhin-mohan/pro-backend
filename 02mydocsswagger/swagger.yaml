@@ -65,7 +65,7 @@ paths:
   get: 
     tags:
        - Objects
-    summary: returns a great messaage from LCO
+    summary: returns a uniq course object
     responses: 
       200:
         description: All good succes
@@ -80,6 +80,35 @@ paths:
                   type: string
                 price:
                   type: number
+
+      400:
+        description: Bad request
+        
+      500:
+        description: internal error
+       
+
+ /courses:
+  get: 
+    tags:
+       - Array
+    summary: returns all courses
+    responses: 
+      200:
+        description: All good succes
+        content:
+          application /json:
+            schema:
+              type: array
+              items:
+                types: object                 
+                properties:
+                  id:
+                     type: string
+                  name:
+                     type: string
+                  price:
+                      type: number
 
       400:
         description: Bad request
