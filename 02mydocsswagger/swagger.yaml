@@ -21,10 +21,12 @@ servers:
        enum:
         - v1
         - v2
+       default: "v1"
       protocol:
        enum:
         - http
         - https
+       default: http
 
 
 components:
@@ -58,4 +60,32 @@ paths:
       500:
         description: internal error
        
-     
+
+ /lcoobject:
+  get: 
+    tags:
+       - Objects
+    summary: returns a great messaage from LCO
+    responses: 
+      200:
+        description: All good succes
+        content:
+          application /json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: number
+
+      400:
+        description: Bad request
+        
+      500:
+        description: internal error
+       
+    
+
