@@ -60,13 +60,13 @@ app.post("/login", async (req, res) => {
           res.status(400).send("Field is missing");
         }
 
-        const user = User.findOne({email})
+        const user = await User.findOne({email})
 
         // if(!user){
         //     res.status(400).send("You are not registered in our app")
         // }
 
-      if (!user && (await bcrypt.compare(password, user.password))) {
+      if (user && (await bcrypt.compare(password, user.password))) {
         console.log(user.password);
         const token = jwt.sign(
           { user_id: user._id, email },
