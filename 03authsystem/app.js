@@ -1,9 +1,12 @@
 require("dotenv").config();
 require('./config/database').connect();
-const User = require("./model/user");
+
 const express = require('express');
 const bcrypt = require("bcryptjs")
-const jwt = require('jsonwebtoken') 
+const jwt = require('jsonwebtoken')
+
+const User = require("./model/user");
+const auth = require('./middleware/auth')
 
 const app = express();
 app.use(express.json());
@@ -91,6 +94,10 @@ app.post("/login", async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-})
+});
+
+app.get("/dashboard", auth,  (req, res) => {
+  res.send("Welcome to secret information");
+});
 
 module.exports = app
