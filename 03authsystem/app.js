@@ -4,12 +4,15 @@ require('./config/database').connect();
 const express = require('express');
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
+const cookieParser = require("cookie-parser");
 
 const User = require("./model/user");
-const auth = require('./middleware/auth')
+const auth = require('./middleware/auth');
+const { now } = require("mongoose");
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req,res) => {
     res.send("<>Hello from auth system</>")
@@ -81,7 +84,19 @@ app.post("/login", async (req, res) => {
 
         user.token = token;
         user.password = undefined;
-        res.status(200).json(user);
+        // res.status(200).json(user);
+
+        const options = {
+          expire: new Date(
+            Date.now() + 3* 24 * 60 * 60 * 1000
+          ), httpOnly: true,
+        };
+        res.status(200).cookie('token', token
+          , options).json({
+            succes: true,
+            token,
+            user
+          })
       }
       else{
          res.status(400).send("email or password is incorrect"); 
