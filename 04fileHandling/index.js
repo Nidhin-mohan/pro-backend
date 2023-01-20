@@ -6,7 +6,9 @@ const app = express();
 
 cloudinary.config({
   // cloud_name: processs.env.CLOUD_NAME
- 
+  cloud_name: "",
+  api_key: "",
+  api_secret: "",
 });
 
 
@@ -43,13 +45,34 @@ app.post("/mypost",async (req, res) => {
      console.log(req.body);
      console.log(req.files);
 
-     let file = req.files.samplefile
+     let result;
+     let imageArray = [];
 
-     result = await cloudinary.uploader.upload(
-        file.tempFilePath, {
-            folder: 'users'
+     //uploading multiple file
+      if (req.files) {
+        for (let index = 0; index < req.files.samplefile.length; index++) {
+          let result = await cloudinary.uploader.upload(
+            req.files.samplefile[index].tempFilePath,
+            {
+              folder: "users",
+            }
+          );
+
+          imageArray.push({
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          });
         }
-     )
+      }
+
+    //  ###uploading  single file
+    //  let file = req.files.samplefile
+
+    //  result = await cloudinary.uploader.upload(
+    //     file.tempFilePath, {
+    //         folder: 'users'
+    //     }
+    //  )
 
      console.log(result);
 
