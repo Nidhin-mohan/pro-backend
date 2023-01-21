@@ -25,6 +25,8 @@
     "nodemailer": "^6.9.0",
     "razorpay": "^2.8.4",
     "stripe": "^11.7.0",
-    "validator": "^13.7.0"
+    "swagger-ui-express": "^4.6.0",
+    "validator": "^13.7.0",
+    "yamljs": "^0.3.0"
   }
 }
