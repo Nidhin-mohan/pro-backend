@@ -1,8 +1,9 @@
 const express = require('express');
-
+const Razorpay = require('razorpay')
 const app = express();
 
-app.use(express.json)
+app.use(express.json())
+app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
     res.send("hi there");
@@ -13,8 +14,8 @@ app.post("/order", async(req,res) => {
     const amount = req.body.amount;
 
   var instance = new Razorpay({
-    key_id: "",
-    key_secret: ""
+    key_id: "rzp_test_nl1GcLbmLjKajJ",
+    key_secret: "",
     // this needs to go in .env
   });
 
