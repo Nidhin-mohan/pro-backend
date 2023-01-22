@@ -2,8 +2,8 @@ const express = require("express")
 require('dotenv').config()
 
 const app = express()
-const morgan = require('morgan')
-const cookieParser = require("morgan")
+// const morgan = require('morgan')
+const cookieParser = require("cookie-parser");
 const fileUpload = require('express-fileupload')
 
 //for swagger documentation
@@ -20,11 +20,18 @@ app.use(express.urlencoded({extended: true}))
 
 //cookies and file  middleware
 app.use(cookieParser())
-app.use(fileUpload())
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp",
+}))
 
+//temp check
+app.set("view engine", "ejs");
 
 //morgan middleware
-app.use(morgan("tiny"));
+// app.use(morgan("tiny"));
+
+
 
 //import all rooutes here
 const home = require('./routes/home')
@@ -35,6 +42,9 @@ app.use('/api/v1',home)
 app.use('/api/v1',user)
 
 
-
+app.get("/signuptest", (req, res) => {
+   
+  res.render("signuptest");
+});
 
 module.exports = app
