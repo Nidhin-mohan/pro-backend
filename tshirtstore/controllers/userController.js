@@ -6,6 +6,7 @@ const cookieToken = require('../utils/cookieToken')
 const fileupload = require('express-fileupload')
 const cloudinary = require("../config/cloudinary")
 const mailHelper = require("../utils/emailHelper");
+const crypto = require("crypto");
 
 
 exports.signup = BigPromise(async (req, res, next) => {
@@ -135,3 +136,42 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
 
 });
 
+
+exports.passwordReset = BigPromise(async (req, res, next) => {
+  const forgotToken = req.params.token;
+
+  const encryToken = crypto
+    .createHash("sha256")
+    .update(forgotToken)
+    .digest("hex");
+
+  console.log("front end ", encryToken);
+
+  // find user based on hased on token and time in future
+  const user = await User.findOne({
+    forgotPasswordToken : encryToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  // console.log(user.forgotPasswordToken);
+  console.log("user", user);
+  if (!user) {
+    return next(new CustomError("Token is invalid or expired", 400));
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(
+      new CustomError("password and confirm password do not match", 400)
+    );
+  }
+
+  user.password = req.body.password;
+
+  // reset token fields
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+
+  await user.save();
+
+  cookieToken(user, res);
+});

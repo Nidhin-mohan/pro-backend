@@ -29,11 +29,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     id: {
       type: String,
-      required: true,
+      
     },
     secure_url: {
       type: String,
-      required: true,
+      
     },
   },
   forgotPasswordToken: String,
@@ -53,8 +53,8 @@ userSchema.pre("save", async function (next) {
 });
 
 //validate the password with passed on user password
- userSchema.methods.isValidatedPassword = async function (usersendPassword) {
-   return await bcrypt.compare(usersendPassword, this.password);
+ userSchema.methods.isValidatedPassword = async function(usersendPassword){
+  return await  bcrypt.compare(usersendPassword,this.password)
  };
 
  //create and return jwt token
