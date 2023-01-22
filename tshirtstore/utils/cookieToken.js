@@ -1,5 +1,5 @@
 const cookieToken = (user, res) => {
-   console.log("first")
+   
     const token = user.getJwtToken();
     console.log(token, user)
     const options = {
