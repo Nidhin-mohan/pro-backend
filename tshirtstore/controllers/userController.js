@@ -5,7 +5,7 @@ const user = require('../models/user')
 const cookieToken = require('../utils/cookieToken')
 const fileupload = require('express-fileupload')
 const cloudinary = require("../config/cloudinary")
-
+const mailHelper = require("../utils/emailHelper");
 
 
 exports.signup = BigPromise(async (req, res, next) => {
@@ -86,3 +86,52 @@ exports.logout = BigPromise(async (req, res, next) => {
     message: "Logout success",
   });
 });
+
+exports.forgotPassword = BigPromise(async (req, res, next) => {
+  // collect email
+  const { email } = req.body;
+
+  // find user in database
+  const user = await User.findOne({ email });
+
+  // if user not found in database
+  if (!user) {
+    return next(new CustomError("Email not found as registered", 400));
+  }
+
+  //get token from user model methods
+  const forgotToken = user.getForgotPasswordToken();
+
+// making false to not validate all data in model
+   await user.save({validateBeforeSave:false})
+
+  const myUrl = `${req.protociol}://${req.get("host")}/password/reset/${forgotToken}`
+
+  const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`
+
+  try {
+    await mailHelper({
+      email: user.email,
+      subject: "Tshirt store - Password reset email",
+      message,
+    });
+
+    // json reponse if email is success
+    res.status(200).json({
+      succes: true,
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    // reset user fields if things goes wrong
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    // send error response
+    return next(new CustomError(error.message, 500));
+  }
+
+
+
+});
+
