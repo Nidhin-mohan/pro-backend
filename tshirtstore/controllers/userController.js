@@ -69,6 +69,7 @@ exports.login = BigPromise(async (req, res, next) => {
     );
   }
 
+  
   // if all goes good and we send the token
   cookieToken(user, res);
 });
@@ -174,4 +175,16 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
   await user.save();
 
   cookieToken(user, res);
+});
+
+exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  // console.log("Request data:");
+  // console.log(req);
+  //send response and user data
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
