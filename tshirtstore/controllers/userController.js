@@ -300,6 +300,34 @@ exports.admingetOneUser = BigPromise(async (req, res, next) => {
 });
 
 
+exports.adminUpdateOneUserDetails = BigPromise(async (req, res, next) => {
+  // add a check for email and name in body
+  console.log(req.body.name, req.body.email, req.body.role);
+if(!req.body.name  && !req.body.email && !req.body.role){
+    return next(new CustomError("Please enter valid fields", 400));
+  
+  }
+
+  // get data from request body
+  const newData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  console.log(newData)
+  // update the user in database
+  const user = await User.findByIdAndUpdate(req.params.id, newData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
 
 exports.managerAllUser = BigPromise(async (req, res, next) => {
   // select the user with role of user
