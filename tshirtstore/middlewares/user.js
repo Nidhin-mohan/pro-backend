@@ -21,9 +21,17 @@ exports.isLoggedIn = BigPromise(async (req, res, next) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   req.user = await User.findById(decoded.id);
-  
-  console.log("middleware", req.user)
 
   next();
 });
+
+
+exports.customRole = (...roles) => {
+return(req, res, next) => {
+  if(!roles.includes(req.user.role)){
+      return next (new CustomError('you are not allowed for this reasourse', 403))
+  }
+  next()
+}
+}
 
