@@ -219,6 +219,10 @@ exports.changePassword = BigPromise(async (req, res, next) => {
 
 exports.updateUserDetails = BigPromise(async (req, res, next) => {
   // add a check for email and name in body
+  if(!req.body.name  && !req.body.email){
+    return next(new CustomError("Please enter valid fields", 400));
+
+  }
 
   // collect data from body
   const newData = {
@@ -233,23 +237,31 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
     const imageId = user.photo.id;
 
     // delete photo on cloudinary
-    const resp = await cloudinary.v2.uploader.destroy(imageId);
+    if(imageId){
+      const resp = await cloudinary.uploader.destroy(imageId);
+    }
 
     // upload the new photo
-    const result = await cloudinary.v2.uploader.upload(
-      req.files.photo.tempFilePath,
-      {
-        folder: "users",
-        width: 150,
-        crop: "scale",
-      }
-    );
+   let file = req.files.photo;
+   console.log("file line 246", req.files.photo);
+  
+   if (file){
+     const result = await cloudinary.uploader.upload(file.tempFilePath, {
+       folder: "users",
+       width: 150,
+       crop: "scale",
+     });
 
-    // add photo data in newData object
-    newData.photo = {
-      id: result.public_id,
-      secure_url: result.secure_url,
-    };
+     // add photo data in newData object
+     newData.photo = {
+       id: result.public_id,
+       secure_url: result.secure_url,
+     };
+   }
+
+
+
+   
   }
 
   // update the data in user
