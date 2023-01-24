@@ -354,7 +354,9 @@ paths:
           description: Bad request
         500:
           description: internal server error
-           /password/update:
+ 
+  
+  /password/update:
     post:
       tags:
         - User
@@ -406,25 +408,29 @@ paths:
           description: Bad request
         500:
           description: internal server error
-  
-  /password/update:
+  /userdashboard/update:
     post:
       tags:
         - User
-      summary: User can update the password if he is logged in. Send oldPassword and password
+      summary: User can update the name, emails and photo. Photo is optional
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               required:
-                - oldPassword
-                - password
+                - name
+                - email
               properties:
-                oldPassword:
+                name:
                   type: string
-                password:
+                email:
                   type: string
+                photo:
+                  in: formData
+                  description: The uploaded file data
+                  type: file
+                  format: binary
       responses:
         200:
           description: All good success
@@ -433,28 +439,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
-                    type: string
-                  user:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      email:
-                        type: string
-                      role:
-                        type: string
-                      photo:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          secure_url:
-                            type: string
-                      _id:
-                        type: string
-                      createdAt:
-                        type: string
+                  success:
+                    type: boolean
+                  
         400:
           description: Bad request
         500:
