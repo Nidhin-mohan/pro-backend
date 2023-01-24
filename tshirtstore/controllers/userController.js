@@ -284,6 +284,21 @@ exports.adminAllUser = BigPromise(async (req, res, next) => {
 
 });
 
+exports.admingetOneUser = BigPromise(async (req, res, next) => {
+  
+  const user = await User.findOne(req.params.id)
+ 
+  if (!user){
+    next(new CustomError('no user found', 400))
+  }
+
+ res.status(200).json({
+  succes: true,
+  users 
+ })
+
+});
+
 
 
 exports.managerAllUser = BigPromise(async (req, res, next) => {
