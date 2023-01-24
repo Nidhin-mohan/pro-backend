@@ -329,6 +329,32 @@ if(!req.body.name  && !req.body.email && !req.body.role){
 });
 
 
+
+exports.adminDeleteOneUser = BigPromise(async (req, res, next) => {
+  // get user from url
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new CustomError("No Such user found", 401));
+  }
+
+  // get image id from user in database
+  const imageId = user.photo.id;
+
+  // delete image from cloudinary
+  if(imageId){
+    await cloudinary.uploader.destroy(imageId);
+    console.log("image deleted")
+  }
+
+  // remove user from databse
+  await user.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
 exports.managerAllUser = BigPromise(async (req, res, next) => {
   // select the user with role of user
   const users = await User.find({ role: "user" });
