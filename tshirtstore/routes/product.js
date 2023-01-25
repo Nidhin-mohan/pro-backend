@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const {testproduct} = require("../controllers/productController")
+const {addProduct} = require("../controllers/productController")
 const { isLoggedIn, customRole } = require("../middlewares/user");
 
 
-router.route("/test").get(testproduct);
+router.route("/addproduct").post(isLoggedIn, addProduct);
 
 
 module.exports = router;
