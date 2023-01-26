@@ -230,7 +230,7 @@ let AlreadyReview = product.reviews && product.reviews.some(review => review.use
    try {
       await product.save()
    } catch (error) {
-    console.log(error);
+    console.log(error)
    }
 
      console.log("product test line 232", product)

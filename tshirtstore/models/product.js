@@ -38,50 +38,50 @@ const productSchema = new mongoose.Schema({
       values: ["shortsleeves", "longsleeves", "sweatshirt", "hoodies"],
       message:
         "please select category ONLY from - short-sleeves, long-sleeves, sweat-shirts and hoodies ",
-    },
-    brand: {
-      type: String,
-      required: [true, "please add a brand for clothing"],
-    },
-    ratings: {
-      type: Number,
-      default: 0,
-    },
-    numberOfReviews: {
-      type: Number,
-      default: 0,
-    },
-    reviews: [
-      {
-        user: {
-          type: mongoose.Schema.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        name: {
-          type: String,
-          required: true,
-        },
-        rating: {
-          type: Number,
-          required: true,
-        },
-        comment: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
-    user: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+    }
   },
+  brand: {
+    type: String,
+    required: [true, "please add a brand for clothing"],
+  },
+  ratings: {
+    type: Number,
+    default: 0,
+  },
+  numberOfReviews: {
+    type: Number,
+    default: 0,
+  },
+  reviews: [
+    {
+      user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      rating: {
+        type: Number,
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 
