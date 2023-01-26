@@ -23,7 +23,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
           folder: "products",
         }
       );
-     console.log(result)
+     
       imageArray.push({
         id: result.public_id,
         secure_url: result.secure_url,
@@ -94,8 +94,8 @@ exports.getAllProduct = BigPromise(async (req, res, next) => {
   });
 });
 
-exports.getOneProduct = BigPromise(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+exports.adminGetOneProduct = BigPromise(async (req, res, next) => {
+  let product = await Product.findById(req.params.id);
 
   if (!product) {
     return next(new CustomError("No product found with this id", 401));
@@ -105,4 +105,55 @@ exports.getOneProduct = BigPromise(async (req, res, next) => {
     product,
   });
 });
+
+exports.adminUpdateOneProduct = BigPromise(async (req, res, next) => {
+  let product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new CustomError("No product found with this id", 401));
+  }
+
+  let imagesArray = [];
+
+console.log(req.files)  
+  if (req.files) {
+
+    console.log('handling images')
+    //destroy the existing image
+    for (let index = 0; index < product.photos.length; index++) {
+     const res = await cloudinary.uploader.destroy(product.photos[index].id)
+      
+    }
+
+    //uploading new images 
+     for (let index = 0; index < req.files.photos.length; index++) {
+       let result = await cloudinary.uploader.upload(
+         req.files.photos[index].tempFilePath,
+         {
+           folder: "products",
+         }
+       );
+       console.log(result);
+       imagesArray.push({
+         id: result.public_id,
+         secure_url: result.secure_url,
+       });
+     }
+  }
+
+  req.body.photos = imagesArray
+
+  product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    userFindAndMOdify: false
+  })
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+});
+
+
 
