@@ -8,7 +8,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
   // images
 
   let imageArray = [];
-  console.log(req.files)
+ 
 
   if (!req.files) {
     return next(new CustomError("images are required", 401));
@@ -30,7 +30,7 @@ exports.addProduct = BigPromise(async (req, res, next) => {
       });
     }
   }
-    console.log("req.user",req.user)
+  
   req.body.photos = imageArray;
   req.body.user = req.user.id;
 
@@ -115,10 +115,10 @@ exports.adminUpdateOneProduct = BigPromise(async (req, res, next) => {
 
   let imagesArray = [];
 
-console.log(req.files)  
+
   if (req.files) {
 
-    console.log('handling images')
+    
     //destroy the existing image
     for (let index = 0; index < product.photos.length; index++) {
      const res = await cloudinary.uploader.destroy(product.photos[index].id)
@@ -133,7 +133,7 @@ console.log(req.files)
            folder: "products",
          }
        );
-       console.log(result);
+      
        imagesArray.push({
          id: result.public_id,
          secure_url: result.secure_url,
@@ -164,7 +164,7 @@ exports.adminDeleteOneProduct = BigPromise(async (req, res, next) => {
 
   
 
-    console.log('handling images')
+   
     //destroy the existing image
     for (let index = 0; index < product.photos.length; index++) {
      await cloudinary.uploader.destroy(product.photos[index].id)
@@ -193,9 +193,17 @@ exports.addReview = BigPromise(async (req, res, next) => {
 
   const product = await Product.findById(productId)
 
+  
+
+
+/*
+this code does not check for the option when review is not there
   const AlreadyReview = product.reviews.find(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
+*/
+
+let AlreadyReview = product.reviews && product.reviews.some(review => review.user.toString() === req.user._id.toString());
 
 
   if (AlreadyReview) {
@@ -207,20 +215,29 @@ exports.addReview = BigPromise(async (req, res, next) => {
     })
     
   } else {
+   product.reviews = product.reviews ? product.reviews : [];
     product.reviews.push(review)
     product.numberOfReviews = product.reviews.length;
   }
-
   //adjust ratings
+
+  console.log("test review",product.reviews)
 
    product.ratings =
      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
      product.reviews.length;
 
-     await product.save({validateBeforeSave: false})
+   try {
+      await product.save()
+   } catch (error) {
+    console.log(error);
+   }
+
+     console.log("product test line 232", product)
 
      res.status(200).json({
-      success: true
+      success: true,
+      message: "comment added",
      })
 
 });
@@ -271,4 +288,9 @@ exports.getOnlyReviewsForOneProduct = BigPromise(async (req, res, next) => {
     reviews: product.reviews,
   });
 });
+
+
+
+
+
 
