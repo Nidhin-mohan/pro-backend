@@ -94,7 +94,7 @@ exports.getAllProduct = BigPromise(async (req, res, next) => {
   });
 });
 
-exports.adminGetOneProduct = BigPromise(async (req, res, next) => {
+exports.getOneProduct = BigPromise(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -176,10 +176,9 @@ exports.adminDeleteOneProduct = BigPromise(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "product was deleted !",
+    message: "product was deleted !"
   });
 });
-
 
 
 
