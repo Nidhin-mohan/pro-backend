@@ -68,3 +68,41 @@ exports.getAllProduct = BigPromise(async (req, res, next) => {
     totalcountProduct,
   });
 });
+
+
+exports.getAllProduct = BigPromise(async (req, res, next) => {
+  const resultPerPage = 6;
+  const totalcountProduct = await Product.countDocuments();
+
+  const productsObj = new WhereClause(Product.find(), req.query)
+    .search()
+    .filter();
+
+  let products = await productsObj.base;
+  const filteredProductNumber = products.length;
+
+  //products.limit().skip()
+
+  productsObj.pager(resultPerPage);
+  products = await productsObj.base.clone();
+
+  res.status(200).json({
+    success: true,
+    products,
+    filteredProductNumber,
+    totalcountProduct,
+  });
+});
+
+exports.getOneProduct = BigPromise(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new CustomError("No product found with this id", 401));
+  }
+  res.status(200).json({
+    success: true,
+    product,
+  });
+});
+
