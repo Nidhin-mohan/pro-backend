@@ -243,10 +243,13 @@ let AlreadyReview = product.reviews && product.reviews.some(review => review.use
 });
 
 exports.deleteReview = BigPromise(async (req, res, next) => {
-  const { productId } = req.query;
+  const productId = req.query.id;
+ 
+//  console.log(productId)
+//   const product = await Product.findById(productId);
+ const product = await Product.findById(productId);
 
-  const product = await Product.findById(productId);
-
+ console.log(product)
   const reviews = product.reviews.filter(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
